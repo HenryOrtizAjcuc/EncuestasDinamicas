@@ -6,7 +6,11 @@ namespace Acme.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
+        [StringLength(200)]      
         public string Email { get; set; }
+
+        [Required]
         public string Password { get; set; }
 
         // Relacion con la tabla Rol
