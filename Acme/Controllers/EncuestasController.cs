@@ -29,6 +29,13 @@ namespace Acme.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Encuesta encuesta = await db.Encuestas.FindAsync(id);
+            var campos = db.Campos.Where(x => x.EncuestaId == id);
+
+            foreach (Campo item in campos)
+            {
+                encuesta.Campos.Add(item);
+            }
+
             if (encuesta == null)
             {
                 return HttpNotFound();

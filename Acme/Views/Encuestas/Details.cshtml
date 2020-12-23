@@ -26,9 +26,58 @@
             @Html.DisplayFor(model => model.Descripcion)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Url)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Url)
+        </dd>
     </dl>
+
+    @foreach (var item in Model.Campos)
+    {
+        <h5>
+            Campo
+        </h5>
+        <dl class="dl-horizontal">
+            @*Nombre*@
+            <dt>
+                @Html.DisplayNameFor(model => item.Nombre)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.Nombre)
+            </dd>
+
+            @*Titulo*@
+            <dt>
+                @Html.DisplayNameFor(model => item.Titulo)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.Titulo)
+            </dd>
+
+            @*EsRequerido*@
+            <dt>
+                @Html.DisplayNameFor(model => item.EsRequerido)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.EsRequerido)
+            </dd>
+            @*TipoCampo*@
+            <dt>
+                @Html.DisplayNameFor(model => item.TipoCampo)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => item.TipoCampo)
+            </dd>
+        </dl>
+    }
+
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Regresar a Encuestas", "Index")
 </p>

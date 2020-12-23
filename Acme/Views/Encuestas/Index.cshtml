@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Acme.Models.Encuesta>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Listado Encuestas";
 }
 
-<h2>Index</h2>
+<h2>Encuestas Activas</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Crear Encuesta", "Create")
 </p>
 <table class="table">
     <tr>
@@ -17,23 +17,30 @@
         <th>
             @Html.DisplayNameFor(model => model.Descripcion)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Url)
+        </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descripcion)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Url)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Detalle", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>

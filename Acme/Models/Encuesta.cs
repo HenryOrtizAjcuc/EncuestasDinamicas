@@ -17,6 +17,9 @@ namespace Acme.Models
         [StringLength(200)]
         public string Descripcion { get; set; }
 
+        [StringLength(200)]
+        public string Url { get; set; }
+
         // Relacion con la tabla campo
         public ICollection<Campo> Campos { get; set; }
     }
