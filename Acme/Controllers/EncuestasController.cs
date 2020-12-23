@@ -123,6 +123,35 @@ namespace Acme.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public async Task<ActionResult> CreateUrl(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Encuesta encuesta = await db.Encuestas.FindAsync(id);
+            if (encuesta.Url.Equals(""))
+            {
+                encuesta.Url = new Guid().ToString();
+                db.Entry(encuesta).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
+        }
+
+        //// POST: Encuestas/CreateUrl/
+        //[HttpPost, ActionName("CreateUrl")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> CreateUrl([Bind(Include = "Id")] int id)
+        //{
+        //    Encuesta encuesta = await db.Encuestas.FindAsync(id);
+        //    encuesta.Url = new Guid().ToString();
+        //    db.Entry(encuesta).State = EntityState.Modified;
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
