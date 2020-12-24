@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Acme.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Acme.Models;
 
 namespace Acme.Controllers
 {
@@ -122,8 +120,7 @@ namespace Acme.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
-
+              
         public async Task<ActionResult> CreateUrl(int? id)
         {
             if (id == null)
@@ -131,7 +128,7 @@ namespace Acme.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Encuesta encuesta = await db.Encuestas.FindAsync(id);
-            if (encuesta.Url.Equals(""))
+            if (String.IsNullOrEmpty(encuesta.Url))
             {
                 encuesta.Url = new Guid().ToString();
                 db.Entry(encuesta).State = EntityState.Modified;
@@ -139,18 +136,6 @@ namespace Acme.Controllers
             }
             return RedirectToAction("Index");
         }
-
-        //// POST: Encuestas/CreateUrl/
-        //[HttpPost, ActionName("CreateUrl")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> CreateUrl([Bind(Include = "Id")] int id)
-        //{
-        //    Encuesta encuesta = await db.Encuestas.FindAsync(id);
-        //    encuesta.Url = new Guid().ToString();
-        //    db.Entry(encuesta).State = EntityState.Modified;
-        //    await db.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-        //}
 
         protected override void Dispose(bool disposing)
         {

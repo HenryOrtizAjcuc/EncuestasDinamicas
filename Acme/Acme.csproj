@@ -129,6 +129,8 @@
     <Compile Include="Controllers\CamposController.cs" />
     <Compile Include="Controllers\EncuestasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\CuentaController.cs" />
+    <Compile Include="Controllers\RolsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -137,6 +139,7 @@
     <Compile Include="Models\Campo.cs" />
     <Compile Include="Models\Encuesta.cs" />
     <Compile Include="Models\Rol.cs" />
+    <Compile Include="Models\SecurityPassword.cs" />
     <Compile Include="Models\TipoCampo.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -187,6 +190,13 @@
     <Content Include="Views\Campos\Details.cshtml" />
     <Content Include="Views\Campos\Edit.cshtml" />
     <Content Include="Views\Campos\Index.cshtml" />
+    <Content Include="Views\Rols\Create.cshtml" />
+    <Content Include="Views\Rols\Delete.cshtml" />
+    <Content Include="Views\Rols\Details.cshtml" />
+    <Content Include="Views\Rols\Edit.cshtml" />
+    <Content Include="Views\Rols\Index.cshtml" />
+    <Content Include="Views\Cuenta\Create.cshtml" />
+    <Content Include="Views\Cuenta\Iniciar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
