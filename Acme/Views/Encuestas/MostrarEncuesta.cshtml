@@ -1,7 +1,7 @@
 ﻿@model Acme.Models.Encuesta
 
 @{
-    ViewData["Title"] = "Encuesta";    
+    ViewData["Title"] = "Encuesta";
 }
 
 <div>
@@ -19,13 +19,34 @@
                 @switch (item.TipoCampo)
                 {
                     case Acme.Models.TipoCampo.Texto:
-                        <input type="text" class="form-control" id="@item.Nombre">
+                        if (item.EsRequerido)
+                        {
+                            <input type="text" class="form-control" id="@item.Nombre" required>
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" id="@item.Nombre">
+                        }
                         break;
                     case Acme.Models.TipoCampo.Numero:
-                        <input type="number" class="form-control" id="@item.Nombre">
+                        if (item.EsRequerido)
+                        {
+                            <input type="number" class="form-control" id="@item.Nombre" required>
+                        }
+                        else
+                        {
+                            <input type="number" class="form-control" id="@item.Nombre">
+                        }
                         break;
                     case Acme.Models.TipoCampo.Fecha:
-                        <input type="date" class="form-control" id="@item.Nombre">
+                        if (item.EsRequerido)
+                        {
+                            <input type="date" class="form-control" id="@item.Nombre" required>
+                        }
+                        else
+                        {
+                            <input type="date" class="form-control" id="@item.Nombre">
+                        }
                         break;
                 }
             </div>
