@@ -6,6 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Reflection;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Acme.Controllers
 {
@@ -39,6 +42,33 @@ namespace Acme.Controllers
                 return HttpNotFound();
             }
             return View(encuesta);
+        }
+
+        public async Task<ActionResult> MostrarEncuesta(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Encuesta encuesta = await db.Encuestas.FindAsync(id);
+            var campos = db.Campos.Where(x => x.EncuestaId == id);
+            foreach (Campo campo in campos)
+            {
+                encuesta.Campos.Add(campo);
+            }
+
+            if (encuesta == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(encuesta);
+        }
+
+        private static void EncuentraTipos(Type type)
+        {
+
         }
 
         // GET: Encuestas/Create
@@ -120,7 +150,7 @@ namespace Acme.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-              
+
         public async Task<ActionResult> CreateUrl(int? id)
         {
             if (id == null)

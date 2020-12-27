@@ -1,0 +1,37 @@
+﻿@model Acme.Models.Encuesta
+
+@{
+    ViewData["Title"] = "Encuesta";    
+}
+
+<div>
+    <h2>@Html.DisplayFor(model => model.Nombre)</h2>
+    <hr />
+    <p>
+        @Html.DisplayFor(model => model.Descripcion)
+    </p>
+    <form>
+        @foreach (var item in Model.Campos)
+        {
+
+            <div class="form-group mt-1">
+                <label for="@item.Nombre">@item.Titulo</label>
+                @switch (item.TipoCampo)
+                {
+                    case Acme.Models.TipoCampo.Texto:
+                        <input type="text" class="form-control" id="@item.Nombre">
+                        break;
+                    case Acme.Models.TipoCampo.Numero:
+                        <input type="number" class="form-control" id="@item.Nombre">
+                        break;
+                    case Acme.Models.TipoCampo.Fecha:
+                        <input type="date" class="form-control" id="@item.Nombre">
+                        break;
+                }
+            </div>
+        }
+    </form>
+    <div>
+        <button type="button" class="btn btn-primary mt-4">Enviar</button>
+    </div>
+</div>
