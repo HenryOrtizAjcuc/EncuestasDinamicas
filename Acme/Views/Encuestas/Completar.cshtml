@@ -1,0 +1,79 @@
+﻿@model Acme.Models.Encuesta
+
+@{
+    ViewBag.Title = "Completar";
+}
+
+<div class="alert-success mt-5">
+    @ViewBag.Message
+</div>
+<div class="alert-danger mt-5">
+    @ViewBag.Error
+</div>
+<div>
+    <dl class="dl-horizontal">
+        <dd>
+            <h1>@Html.DisplayFor(model => model.Nombre)</h1>
+        </dd>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+    </dl>
+</div>
+<hr />
+<div>
+    <form action="Completar" method="post">
+        <input type="number" name="id" value="@Model.Id" style="visibility:hidden" />
+        @foreach (var item in Model.Campos)
+        {
+            <div class="form-group">
+                @Html.DisplayFor(modelItem => item.Titulo)
+                @switch (item.TipoCampo)
+                {
+                    case Acme.Models.TipoCampo.Texto:
+                        if (item.EsRequerido)
+                        {
+                            <input type="text" name="@item.Nombre" value="" class="form-control" required />
+                        }
+                        else
+                        {
+                            <input type="text" name="@item.Nombre" value="" class="form-control" />
+                        }
+                        break;
+                    case Acme.Models.TipoCampo.Numero:
+                        if (item.EsRequerido)
+                        {
+                            <input type="number" name="@item.Nombre" value="" class="form-control" required />
+                        }
+                        else
+                        {
+                            <input type="number" name="@item.Nombre" value="" class="form-control" />
+                        }
+                        break;
+                    case Acme.Models.TipoCampo.Fecha:
+                        if (item.EsRequerido)
+                        {
+                            <input type="date" name="@item.Nombre" value="" class="form-control" required />
+                        }
+                        else
+                        {
+                            <input type="date" name="@item.Nombre" value="" class="form-control" />
+                        }
+                        break;
+                }
+            </div>
+        }
+        @if (ViewBag.Message == null)
+        {
+            <div class="form-group">
+                <input type="submit" value="Enviar Encuesta" class="btn btn-primary" />
+            </div>
+        }
+    </form>
+</div>
+<div>
+    <p>
+        @Html.ActionLink("Regresar a Encuestas", "Index")
+    </p>
+</div>

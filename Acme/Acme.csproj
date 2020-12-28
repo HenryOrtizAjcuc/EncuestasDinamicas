@@ -226,7 +226,6 @@
     <Content Include="Views\Rols\Index.cshtml" />
     <Content Include="Views\Cuenta\Create.cshtml" />
     <Content Include="Views\Cuenta\Iniciar.cshtml" />
-    <Content Include="Views\Encuestas\MostrarEncuesta.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
@@ -237,6 +236,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Encuestas\AgregarCampo.cshtml" />
+    <Content Include="Views\Encuestas\Completar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

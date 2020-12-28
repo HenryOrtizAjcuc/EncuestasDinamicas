@@ -21,15 +21,15 @@
 
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Encuestas/Index">Encuestas</a>
-                    </li>
                     @*<li class="nav-item">
                             <a class="nav-link" href="/Cuenta/Iniciar">Ingresar</a>
                         </li>*@
 
                     @if (Session["User"] != null)
                     {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Encuestas/Index">Encuestas</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Cuenta/Salir">Salir</a>
                         </li>

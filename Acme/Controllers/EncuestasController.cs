@@ -46,28 +46,6 @@ namespace Acme.Controllers
             return View(encuesta);
         }
 
-        public async Task<ActionResult> MostrarEncuesta(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Encuesta encuesta = await db.Encuestas.FindAsync(id);
-            var campos = db.Campos.Where(x => x.EncuestaId == id);
-            foreach (Campo campo in campos)
-            {
-                encuesta.Campos.Add(campo);
-            }
-
-            if (encuesta == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(encuesta);
-        }
-
         // GET: Encuestas/Create
         public ActionResult Create()
         {
@@ -165,7 +143,7 @@ namespace Acme.Controllers
 
             if (String.IsNullOrEmpty(encuesta.Url))
             {
-                encuesta.Url = $"/Encuestas/MostrarEncuesta/{id}";
+                encuesta.Url = $"/Encuestas/Completar/{id}";
                 db.Entry(encuesta).State = EntityState.Modified;
                 await db.SaveChangesAsync();
             }
@@ -251,14 +229,60 @@ namespace Acme.Controllers
             return View(campo);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult MostrarEncuesta(Encuesta encuesta)
+        [HttpGet]
+        public ActionResult Completar(int id)
         {
+            var encuesta = db.Encuestas.FirstOrDefault(x => x.Id == id);
+            var campos = db.Campos.Where(x => x.EncuestaId == id).ToList();
+            return View(encuesta);
+        }
 
-            var sqlcommand = String.Format("");
-            db.Database.ExecuteSqlCommand(sqlcommand);
-            return RedirectToAction("Index");
+        [HttpPost]
+        public ActionResult Completar()
+        {
+            int id = int.Parse(Request.Form["id"]);
+            var encuesta = db.Encuestas.FirstOrDefault(x => x.Id == id);
+            var campos = db.Campos.Where(x => x.EncuestaId == id);
+
+            try
+            {
+                string sqlcommand = string.Empty;
+                string fileds = string.Empty;
+                string values = string.Empty;
+
+                sqlcommand += $"insert into [Acme].dbo.{encuesta.Nombre.ToLower().Replace(" ", "").Trim()} ";
+
+                foreach (var item in campos)
+                {
+                    string tipo = item.TipoCampo.ToString();
+                    bool esRequerido = item.EsRequerido;
+
+                    string campo = item.Nombre.ToLower().Replace(" ", "");
+                    string valor = Request.Form[item.Nombre];
+
+                    fileds += fileds == string.Empty
+                        ? campo
+                        : $",{campo}";
+
+                    values += values == string.Empty
+                        ? valor.Equals("") ? "NULL" : tipo.Equals("Numero") ? valor : $"'{valor}'"
+                        : valor.Equals("") ? ",NULL" : tipo.Equals("Numero") ? $",{valor}" : $",'{valor}'";
+
+                }
+
+                sqlcommand += $"({fileds}) ";
+                sqlcommand += "values ";
+                sqlcommand += $"({values}) ";
+
+                var command = String.Format(sqlcommand);
+                db.Database.ExecuteSqlCommand(command);
+                ViewBag.Message = "Se ha enviado satisfactoriamente la encuesta.";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+            }
+            return View(encuesta);
         }
 
         protected override void Dispose(bool disposing)
