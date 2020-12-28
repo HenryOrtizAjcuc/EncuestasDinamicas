@@ -85,7 +85,7 @@ namespace Acme.Controllers
             {
                 db.Encuestas.Add(encuesta);
                 await db.SaveChangesAsync();
-                return RedirectToAction($"Details/{encuesta.Id}");
+                return RedirectToAction($"../Encuestas/Index");
             }
 
             return View(encuesta);
@@ -154,13 +154,77 @@ namespace Acme.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            var campos = db.Campos.Where(x => x.EncuestaId == id);
             Encuesta encuesta = await db.Encuestas.FindAsync(id);
+
+            foreach (var item in campos)
+            {
+                encuesta.Campos.Add(item);
+            }
+
             if (String.IsNullOrEmpty(encuesta.Url))
             {
-                encuesta.Url = new Guid().ToString();
+                encuesta.Url = $"/Encuestas/MostrarEncuesta/{id}";
                 db.Entry(encuesta).State = EntityState.Modified;
                 await db.SaveChangesAsync();
             }
+            string tabla = $"create table {encuesta.Nombre.Trim().ToLower().Replace(" ", "")}" +
+                $"(id int primary key IDENTITY(1, 1),";
+            string aux = "";
+            foreach (var item in campos)
+            {
+                switch (item.TipoCampo)
+                {
+                    case TipoCampo.Texto:
+                        if (item.EsRequerido)
+                        {
+                            aux += aux.Equals(string.Empty)
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} varchar(200) NOT NULL"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} varchar(200) NOT NULL";
+                        }
+                        else
+                        {
+                            aux += aux.Equals(string.Empty)
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} varchar(200)"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} varchar(200)";
+                        }
+                        break;
+                    case TipoCampo.Numero:
+                        if (item.EsRequerido)
+                        {
+                            aux += aux.Equals(string.Empty)
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} int NOT NULL"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} int NOT NULL";
+                        }
+                        else
+                        {
+                            aux += aux.Equals(string.Empty)
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} int"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} int";
+                        }
+                        break;
+                    case TipoCampo.Fecha:
+                        if (item.EsRequerido)
+                        {
+                            aux += aux.Equals(string.Empty)
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} date NOT NULL"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} date NOT NULL";
+                        }
+                        else
+                        {
+                            aux += aux.Equals(string.Empty)
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} date"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} date";
+                        }
+                        break;
+                }
+
+            }
+            tabla += aux + $")";
+
+            var sqlcommand = String.Format(tabla);
+            db.Database.ExecuteSqlCommand(sqlcommand);
             return RedirectToAction("Index");
         }
 
@@ -185,6 +249,16 @@ namespace Acme.Controllers
 
             ViewBag.EncuestaId = new SelectList(db.Encuestas, "Id", "Nombre", campo.EncuestaId);
             return View(campo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MostrarEncuesta(Encuesta encuesta)
+        {
+
+            var sqlcommand = String.Format("");
+            db.Database.ExecuteSqlCommand(sqlcommand);
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

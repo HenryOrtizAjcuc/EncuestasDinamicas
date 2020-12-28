@@ -1,4 +1,5 @@
 ﻿using Acme.Models;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -15,19 +16,50 @@ namespace Acme.Controllers
             return View();
         }
 
-        // GET: Login/Details/5
-        public ActionResult Details(int? id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Iniciar(string email, string password)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var usuario = (from u in db.Usuarios
+                               where u.Email.Equals(email)
+                               select u).FirstOrDefault();
+
+                if (usuario != null)
+                {
+                    if (SecurityPassword.PasswordStorage.VerifyPassword(password, usuario.Password))
+                    {
+                        ViewBag.Error = "Usuario o contraseña incorrecto";
+                        return View();
+                    }
+                }
+                else
+                {
+                    ViewBag.Error = "Usuario o contraseña incorrecto";
+                    return View();
+                }
+                Session["User"] = usuario;
+
+
+                return RedirectToAction("Index", "Home");
+
             }
-            Usuario usuario = db.Usuarios.Find(id);
-            if (usuario == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                ViewBag.Error = ex.Message;
+                return View();
             }
-            return View(usuario);
+        }
+
+        public ActionResult Salir()
+        {
+            Session["User"] = null;
+            return View("../Cuenta/Iniciar");
         }
 
         // GET: Login/Create

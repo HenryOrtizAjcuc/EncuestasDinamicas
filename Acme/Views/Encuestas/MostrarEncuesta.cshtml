@@ -1,59 +1,89 @@
 ﻿@model Acme.Models.Encuesta
 
-@{
-    ViewData["Title"] = "Encuesta";
-}
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
 
-<div>
-    <h2>@Html.DisplayFor(model => model.Nombre)</h2>
-    <hr />
-    <p>
-        @Html.DisplayFor(model => model.Descripcion)
-    </p>
-    <hr />
-    <form>
-        @foreach (var item in Model.Campos)
-        {
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-            <div class="form-group mt-1">
-                <label for="@item.Nombre">@item.Titulo</label>
-                @switch (item.TipoCampo)
-                {
-                    case Acme.Models.TipoCampo.Texto:
-                        if (item.EsRequerido)
-                        {
-                            <input type="text" class="form-control" id="@item.Nombre" required>
-                        }
-                        else
-                        {
-                            <input type="text" class="form-control" id="@item.Nombre">
-                        }
-                        break;
-                    case Acme.Models.TipoCampo.Numero:
-                        if (item.EsRequerido)
-                        {
-                            <input type="number" class="form-control" id="@item.Nombre" required>
-                        }
-                        else
-                        {
-                            <input type="number" class="form-control" id="@item.Nombre">
-                        }
-                        break;
-                    case Acme.Models.TipoCampo.Fecha:
-                        if (item.EsRequerido)
-                        {
-                            <input type="date" class="form-control" id="@item.Nombre" required>
-                        }
-                        else
-                        {
-                            <input type="date" class="form-control" id="@item.Nombre">
-                        }
-                        break;
-                }
+    @*<div>
+            <h2>@Html.DisplayFor(model => model.Nombre)</h2>
+            <hr />
+            <p>
+                @Html.DisplayFor(model => model.Descripcion)
+            </p>
+            <hr />
+        </div>
+
+        <div class="form-horizontal">
+            @foreach (var item in Model.Campos)
+            {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(x => item.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
             </div>
-        }
-    </form>
+
+            }*@
+
+
     <div>
-        <button type="button" class="btn btn-primary mt-4">Enviar</button>
+        <h2>@Html.DisplayFor(model => model.Nombre)</h2>
+        <hr />
+        <p>
+            @Html.DisplayFor(model => model.Descripcion)
+        </p>
+        <hr />
+        <form>
+            @foreach (var item in Model.Campos)
+            {
+                <div class="form-group mt-1">
+                    @Html.DisplayFor(model => item.Titulo)
+                    @switch (item.TipoCampo)
+                    {
+                        case Acme.Models.TipoCampo.Texto:
+                            if (item.EsRequerido)
+                            {
+                                <input type="text" class="form-control" id="@item.Nombre" required>
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" id="@item.Nombre">
+                            }
+                            break;
+                        case Acme.Models.TipoCampo.Numero:
+                            if (item.EsRequerido)
+                            {
+                                <input type="number" class="form-control" id="@item.Nombre" required>
+                            }
+                            else
+                            {
+                                <input type="number" class="form-control" id="@item.Nombre">
+                            }
+                            break;
+                        case Acme.Models.TipoCampo.Fecha:
+                            if (item.EsRequerido)
+                            {
+                                <input type="date" class="form-control" id="@item.Nombre" required>
+                            }
+                            else
+                            {
+                                <input type="date" class="form-control" id="@item.Nombre">
+                            }
+                            break;
+                    }
+                </div>
+            }
+        </form>
     </div>
-</div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Enviar Encuesta" class="btn btn-primary mt-4" />
+        </div>
+    </div>
+}
