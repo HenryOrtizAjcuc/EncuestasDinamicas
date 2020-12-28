@@ -17,9 +17,11 @@ namespace Acme.Controllers
         private AcmeContext db = new AcmeContext();
 
         // GET: Encuestas
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            return View(await db.Encuestas.ToListAsync());
+            var campos = db.Campos.ToList();
+            var encuestas = db.Encuestas.ToList();
+            return View(encuestas);
         }
 
         // GET: Encuestas/Details/5
@@ -66,11 +68,6 @@ namespace Acme.Controllers
             return View(encuesta);
         }
 
-        private static void EncuentraTipos(Type type)
-        {
-
-        }
-
         // GET: Encuestas/Create
         public ActionResult Create()
         {
@@ -88,7 +85,7 @@ namespace Acme.Controllers
             {
                 db.Encuestas.Add(encuesta);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction($"Details/{encuesta.Id}");
             }
 
             return View(encuesta);
@@ -165,6 +162,29 @@ namespace Acme.Controllers
                 await db.SaveChangesAsync();
             }
             return RedirectToAction("Index");
+        }
+
+        public ActionResult AgregarCampo(int id)
+        {
+            Campo campo = new Campo();
+            campo.EncuestaId = id;
+            ViewBag.EncuestaId = new SelectList(db.Encuestas, "Id", "Nombre", campo.EncuestaId);
+            return View(campo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AgregarCampo([Bind(Include = "Id,Nombre,Titulo,EsRequerido,TipoCampo,EncuestaId")] Campo campo)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Campos.Add(campo);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.EncuestaId = new SelectList(db.Encuestas, "Id", "Nombre", campo.EncuestaId);
+            return View(campo);
         }
 
         protected override void Dispose(bool disposing)
