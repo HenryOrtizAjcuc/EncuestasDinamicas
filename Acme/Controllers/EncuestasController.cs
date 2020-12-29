@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace Acme.Controllers
 {
-    [Authorize(Roles = "1")]
+    [Authorize(Roles = "1,2")]
     public class EncuestasController : Controller
     {
         private AcmeContext db = new AcmeContext();

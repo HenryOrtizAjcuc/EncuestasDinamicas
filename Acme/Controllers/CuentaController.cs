@@ -106,7 +106,11 @@ namespace Acme.Controllers
                 usuario.RolId = db.Roles.Where(x => x.Nombre.Equals("Usuario")).First().Id;
                 db.Usuarios.Add(usuario);
                 db.SaveChanges();
-                return RedirectToAction("Iniciar");
+                ViewBag.Success = "Usuario creado exitosamente";
+            }
+            else
+            {
+                ViewBag.Error = "El usuario no se ha creado.";
             }
 
             return View(usuario);

@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Acme.Controllers
 {
-    [Authorize(Roles = "1")]
+    [Authorize(Roles = "1,2")]
     public class RolsController : Controller
     {
         private AcmeContext db = new AcmeContext();
