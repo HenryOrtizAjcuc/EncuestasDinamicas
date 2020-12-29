@@ -239,6 +239,7 @@ namespace Acme.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult Completar()
         {
             int id = int.Parse(Request.Form["id"]);

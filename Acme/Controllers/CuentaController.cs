@@ -1,8 +1,13 @@
 ﻿using Acme.Models;
+using Microsoft.Owin;
+using Microsoft.Owin.Security;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Acme.Controllers
@@ -10,6 +15,7 @@ namespace Acme.Controllers
     public class CuentaController : Controller
     {
         private AcmeContext db = new AcmeContext();
+        private const string AuthenticationType = "ApplicationCookie";
 
         public ActionResult Iniciar()
         {
@@ -45,6 +51,21 @@ namespace Acme.Controllers
                 }
                 Session["User"] = usuario;
 
+                IList<Claim> claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Sid, usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Name, usuario.Email),
+                    new Claim(ClaimTypes.Role, usuario.RolId.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Email )
+                };
+
+                ClaimsIdentity identity = new ClaimsIdentity(claims, AuthenticationType);
+
+                IAuthenticationManager authenticationManager = System.Web.HttpContext.Current.GetOwinContext().Authentication;
+
+                authenticationManager.SignIn(identity);
+
+
 
                 return RedirectToAction("Index", "Home");
 
@@ -59,6 +80,9 @@ namespace Acme.Controllers
         public ActionResult Salir()
         {
             Session["User"] = null;
+            IAuthenticationManager authenticationManager = System.Web.HttpContext.Current.GetOwinContext().Authentication;
+
+            authenticationManager.SignOut(AuthenticationType);
             return View("../Cuenta/Iniciar");
         }
 
