@@ -1,15 +1,13 @@
 ﻿using Acme.Models;
 using System;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
-using System.Data;
-using System.Configuration;
-using System.Data.SqlClient;
 
 namespace Acme.Controllers
 {
@@ -230,7 +228,7 @@ namespace Acme.Controllers
             return View(campo);
         }
 
-        [HttpGet]
+        [HttpGet]        
         public ActionResult Completar(int id)
         {
             var encuesta = db.Encuestas.FirstOrDefault(x => x.Id == id);
