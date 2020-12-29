@@ -8,7 +8,7 @@ namespace Acme.Models
         public int Id { get; set; }
         [Required]
         [StringLength(200)]
-        [RegularExpression("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$")]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]

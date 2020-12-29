@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace Acme.Controllers
 {
+    [Authorize(Roles = "1")]
     public class EncuestasController : Controller
     {
         private AcmeContext db = new AcmeContext();
@@ -228,7 +229,8 @@ namespace Acme.Controllers
             return View(campo);
         }
 
-        [HttpGet]        
+        [HttpGet]
+        [AllowAnonymous]
         public ActionResult Completar(int id)
         {
             var encuesta = db.Encuestas.FirstOrDefault(x => x.Id == id);
