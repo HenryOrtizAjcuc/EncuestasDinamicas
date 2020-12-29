@@ -6,9 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Reflection;
-using System.IO;
-using System.Collections.Generic;
+
+using System.Data;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace Acme.Controllers
 {
@@ -283,6 +284,38 @@ namespace Acme.Controllers
                 ViewBag.Error = ex.Message;
             }
             return View(encuesta);
+        }
+
+        [HttpGet]
+        public ActionResult ObtenerResultadosEncuesta(int id)
+        {
+            var bd = db.Encuestas.FirstOrDefault(x => x.Id == id).Nombre.ToLower().Replace(" ", "");
+            var campos = db.Campos.Where(x => x.EncuestaId == id);
+            string[] fields = new string[campos.Count()];
+
+            int i = 0;
+            foreach (var item in campos)
+            {
+                fields[i] = item.Nombre.ToLower().Replace(" ", "");
+                i++;
+            }
+            ViewBag.Collection = fields;
+
+            DataSet ds = new DataSet();
+            string constr = ConfigurationManager.ConnectionStrings["AcmeContext"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                string query = $"SELECT * FROM [Acme].dbo.{bd}";
+                using (SqlCommand cmd = new SqlCommand(query))
+                {
+                    cmd.Connection = con;
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                    {
+                        sda.Fill(ds);
+                    }
+                }
+            }
+            return View(ds);
         }
 
         protected override void Dispose(bool disposing)

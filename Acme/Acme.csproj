@@ -237,6 +237,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Encuestas\AgregarCampo.cshtml" />
     <Content Include="Views\Encuestas\Completar.cshtml" />
+    <Content Include="Views\Encuestas\ObtenerResultadosEncuesta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
