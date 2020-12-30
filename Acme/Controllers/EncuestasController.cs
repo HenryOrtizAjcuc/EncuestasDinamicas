@@ -235,7 +235,14 @@ namespace Acme.Controllers
         {
             var encuesta = db.Encuestas.FirstOrDefault(x => x.Id == id);
             var campos = db.Campos.Where(x => x.EncuestaId == id).ToList();
-            return View(encuesta);
+            if (encuesta.Url != null)
+            {
+                return View(encuesta);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]

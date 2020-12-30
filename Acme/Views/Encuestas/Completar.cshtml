@@ -4,13 +4,21 @@
     ViewBag.Title = "Completar";
 }
 
-<div class="alert-success mt-5">
-    @ViewBag.Message
-</div>
-<div class="alert-danger mt-5">
-    @ViewBag.Error
-</div>
-<div>
+<div class="container mt-4">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ViewBag.Message
+        <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @ViewBag.Error
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
     <dl class="dl-horizontal">
         <dd>
             <h1>@Html.DisplayFor(model => model.Nombre)</h1>
@@ -64,7 +72,7 @@
                 }
             </div>
         }
-        @if (ViewBag.Message == null)
+        @if (ViewBag.Message == null && !User.Identity.IsAuthenticated)
         {
             <div class="form-group">
                 <input type="submit" value="Enviar Encuesta" class="btn btn-primary" />
@@ -74,6 +82,9 @@
 </div>
 <div>
     <p>
-        @Html.ActionLink("Regresar a Encuestas", "Index")
+        @if (User.Identity.IsAuthenticated)
+        {
+            @Html.ActionLink("Regresar a Encuestas", "Index")
+        }
     </p>
 </div>
