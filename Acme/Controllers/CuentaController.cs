@@ -38,7 +38,7 @@ namespace Acme.Controllers
 
                 if (usuario != null)
                 {
-                    if (SecurityPassword.PasswordStorage.VerifyPassword(password, usuario.Password))
+                    if (!SecurityPassword.PasswordStorage.VerifyPassword(password, usuario.Password))
                     {
                         ViewBag.Error = "Usuario o contraseña incorrecto";
                         return View();
@@ -97,22 +97,29 @@ namespace Acme.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Email,Password")] Usuario usuario)
+        public ActionResult Create([Bind(Include = "Id,Email,Password,ConfirmPassword")] Usuario usuario)
         {
-            if (ModelState.IsValid)
+            try
             {
-                string pw = SecurityPassword.PasswordStorage.CreateHash(usuario.Password);
-                usuario.Password = pw;
-                usuario.RolId = db.Roles.Where(x => x.Nombre.Equals("Usuario")).First().Id;
-                db.Usuarios.Add(usuario);
-                db.SaveChanges();
-                ViewBag.Success = "Usuario creado exitosamente";
+                if (ModelState.IsValid)
+                {
+                    string pw = SecurityPassword.PasswordStorage.CreateHash(usuario.Password);
+                    usuario.Password = pw;
+                    usuario.ConfirmPassword = pw;
+                    usuario.RolId = db.Roles.Where(x => x.Nombre.Equals("Usuario")).First().Id;
+                    db.Usuarios.Add(usuario);
+                    db.SaveChanges();
+                    ViewBag.Success = "Usuario creado exitosamente";
+                }
+                else
+                {
+                    ViewBag.Error = "El usuario no se ha creado.";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.Error = "El usuario no se ha creado.";
+                ViewBag.Error = ex.Message;
             }
-
             return View(usuario);
         }
 
