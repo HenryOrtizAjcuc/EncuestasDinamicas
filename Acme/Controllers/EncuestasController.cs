@@ -235,7 +235,7 @@ namespace Acme.Controllers
         {
             var encuesta = db.Encuestas.FirstOrDefault(x => x.Id == id);
             var campos = db.Campos.Where(x => x.EncuestaId == id).ToList();
-            if (encuesta.Url != null)
+            if (encuesta != null && encuesta.Url != null)
             {
                 return View(encuesta);
             }
