@@ -158,42 +158,42 @@ namespace Acme.Controllers
                         if (item.EsRequerido)
                         {
                             aux += aux.Equals(string.Empty)
-                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} varchar(200) NOT NULL"
-                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} varchar(200) NOT NULL";
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "_")} varchar(200) NOT NULL"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "_")} varchar(200) NOT NULL";
                         }
                         else
                         {
                             aux += aux.Equals(string.Empty)
-                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} varchar(200)"
-                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} varchar(200)";
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "_")} varchar(200)"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "_")} varchar(200)";
                         }
                         break;
                     case TipoCampo.Numero:
                         if (item.EsRequerido)
                         {
                             aux += aux.Equals(string.Empty)
-                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} int NOT NULL"
-                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} int NOT NULL";
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "_")} int NOT NULL"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "_")} int NOT NULL";
                         }
                         else
                         {
                             aux += aux.Equals(string.Empty)
-                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} int"
-                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} int";
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "_")} int"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "_")} int";
                         }
                         break;
                     case TipoCampo.Fecha:
                         if (item.EsRequerido)
                         {
                             aux += aux.Equals(string.Empty)
-                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} date NOT NULL"
-                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} date NOT NULL";
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "_")} date NOT NULL"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "_")} date NOT NULL";
                         }
                         else
                         {
                             aux += aux.Equals(string.Empty)
-                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "")} date"
-                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "")} date";
+                                ? $"{item.Nombre.Trim().ToLower().Replace(" ", "_")} date"
+                                : $",{item.Nombre.Trim().ToLower().Replace(" ", "_")} date";
                         }
                         break;
                 }
@@ -266,7 +266,7 @@ namespace Acme.Controllers
                     string tipo = item.TipoCampo.ToString();
                     bool esRequerido = item.EsRequerido;
 
-                    string campo = item.Nombre.ToLower().Replace(" ", "");
+                    string campo = item.Nombre.ToLower().Replace(" ", "_");
                     string valor = Request.Form[item.Nombre];
 
                     fileds += fileds == string.Empty
@@ -304,7 +304,7 @@ namespace Acme.Controllers
             int i = 0;
             foreach (var item in campos)
             {
-                fields[i] = item.Nombre.ToLower().Replace(" ", "");
+                fields[i] = item.Nombre.ToLower().Replace(" ", "_");
                 i++;
             }
             ViewBag.Collection = fields;

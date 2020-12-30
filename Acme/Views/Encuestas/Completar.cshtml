@@ -78,7 +78,7 @@
                 }
             </div>
         }
-        @if (ViewBag.Message == null && !User.Identity.IsAuthenticated)
+        @if (ViewBag.Message == null || !User.Identity.IsAuthenticated)
         {
             <div class="form-group">
                 <input type="submit" value="Enviar Encuesta" class="btn btn-primary" />
